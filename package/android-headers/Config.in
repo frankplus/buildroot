@@ -1,0 +1,10 @@
+config BR2_PACKAGE_ANDROID_HEADERS
+    bool "android-headers"
+    help
+      Android headers are necessary for building libraries like
+      libhybris that depend on the Android HAL layer.
+
+      Select this package if you need to build projects that
+      rely on Android headers.
+
+      https://github.com/Halium/android-headers

@@ -1,0 +1,5 @@
+config BR2_PACKAGE_LIBHYBRIS
+    bool "libhybris"
+    help
+      libhybris is a library for using Android drivers in Linux.
+

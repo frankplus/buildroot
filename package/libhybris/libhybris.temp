@@ -1,0 +1,84 @@
+################################################################################
+# libhybris Buildroot Package Makefile
+################################################################################
+
+LIBHYBRIS_VERSION = 9f61f26c44d9a3bf62efb67d4c32a7a0c89c21ca
+LIBHYBRIS_SITE = https://github.com/libhybris/libhybris.git
+LIBHYBRIS_SITE_METHOD = git
+LIBHYBRIS_SUBDIR = hybris
+LIBHYBRIS_DEPENDENCIES = host-autoconf host-libtool
+LIBHYBRIS_INSTALL_STAGING = YES
+LIBHYBRIS_INSTALL_TARGET = YES
+LIBHYBRIS_LICENSE = Apache-2.0
+LIBHYBRIS_LICENSE_FILES = LICENSE
+
+# Android headers
+LIBHYBRIS_ANDROID_HEADERS_URL = https://github.com/Halium/android-headers/archive/2c6ac3dcc4f8db593dd69906b0ec22822abfed91.tar.gz
+LIBHYBRIS_ANDROID_HEADERS_DIR = $(BUILD_DIR)/android-headers
+
+# Custom toolchain and sysroot
+LIBHYBRIS_SYSROOT = $(BR2_TOOLCHAIN_EXTERNAL_PATH)/sysroot
+LIBHYBRIS_TARGET = aarch64-linux-musl
+
+# Compiler and linker
+# LIBHYBRIS_CC = $(BR2_TOOLCHAIN_EXTERNAL_PATH)/bin/clang
+# LIBHYBRIS_CXX = $(BR2_TOOLCHAIN_EXTERNAL_PATH)/bin/clang++
+# LIBHYBRIS_AR = $(BR2_TOOLCHAIN_EXTERNAL_PATH)/bin/llvm-ar
+# LIBHYBRIS_RANLIB = $(BR2_TOOLCHAIN_EXTERNAL_PATH)/bin/llvm-ranlib
+# LIBHYBRIS_STRIP = $(BR2_TOOLCHAIN_EXTERNAL_PATH)/bin/llvm-strip
+# LIBHYBRIS_LD = $(BR2_TOOLCHAIN_EXTERNAL_PATH)/bin/lld
+
+# Build flags
+LIBHYBRIS_CFLAGS = --target=$(LIBHYBRIS_TARGET) --sysroot=$(LIBHYBRIS_SYSROOT) \
+    -D_LARGEFILE64_SOURCE -Wno-error=int-conversion -Wno-string-plus-int \
+    -Wno-deprecated-declarations
+LIBHYBRIS_CXXFLAGS = $(LIBHYBRIS_CFLAGS) -Wno-error=non-pod-varargs \
+    -Wno-format -Wno-old-style-cast -Wunused-value -Wunused-result
+LIBHYBRIS_LDFLAGS = --target=$(LIBHYBRIS_TARGET) --sysroot=$(LIBHYBRIS_SYSROOT) \
+    -L$(LIBHYBRIS_SYSROOT)/usr/lib/$(LIBHYBRIS_TARGET)
+
+# Pre-configure steps: Download and extract Android headers
+define LIBHYBRIS_PRE_CONFIGURE_HOOKS
+    mkdir -p $(LIBHYBRIS_ANDROID_HEADERS_DIR)
+    wget -O android-headers.tar.gz $(LIBHYBRIS_ANDROID_HEADERS_URL)
+    tar -xzf android-headers.tar.gz --strip-components=1 -C $(LIBHYBRIS_ANDROID_HEADERS_DIR)
+endef
+
+# Configure command
+define LIBHYBRIS_CONFIGURE_CMDS
+    cd $(@D)/${LIBHYBRIS_SUBDIR} && autoreconf -fi
+    cd $(@D)/${LIBHYBRIS_SUBDIR} && ./configure \
+        # CC=$(LIBHYBRIS_CC) \
+        # CXX=$(LIBHYBRIS_CXX) \
+        # AR=$(LIBHYBRIS_AR) \
+        # RANLIB=$(LIBHYBRIS_RANLIB) \
+        # STRIP=$(LIBHYBRIS_STRIP) \
+        # LD=$(LIBHYBRIS_LD) \
+        # CFLAGS="$(LIBHYBRIS_CFLAGS)" \
+        # CXXFLAGS="$(LIBHYBRIS_CXXFLAGS)" \
+        # LDFLAGS="$(LIBHYBRIS_LDFLAGS)" \
+        --enable-experimental \
+        --enable-property-cache \
+        --enable-debug \
+        --enable-trace \
+        --enable-stub-linker \
+        --with-android-headers=$(LIBHYBRIS_ANDROID_HEADERS_DIR) \
+        --prefix=$(STAGING_DIR)/usr \
+        --enable-arch=arm64 \
+        --build=x86_64-linux-gnu \
+        --host=$(LIBHYBRIS_TARGET)
+endef
+
+# Build commands
+define LIBHYBRIS_BUILD_CMDS
+    $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) -j$(PARALLEL_JOBS) V=1 LD=$(LIBHYBRIS_LD)
+endef
+
+# Install commands
+define LIBHYBRIS_INSTALL_TARGET_CMDS
+    $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+endef
+
+# Package registration
+$(eval $(generic-package))
+

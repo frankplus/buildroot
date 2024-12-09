@@ -1790,6 +1790,8 @@ menu "Hardware handling"
 	source "package/tslib/Config.in"
 	source "package/uhd/Config.in"
 	source "package/urg/Config.in"
+	source "package/libhybris/Config.in"
+	source "package/android-headers/Config.in"
 endmenu
 
 menu "Javascript"
