@@ -12,8 +12,7 @@ ANDROID_HEADERS_INSTALL_STAGING = YES
 ANDROID_HEADERS_INSTALL_TARGET = NO
 
 define ANDROID_HEADERS_INSTALL_STAGING_CMDS
-    mkdir -p $(STAGING_DIR)/usr/include/android-headers
-    cp -r $(@D)/* $(STAGING_DIR)/usr/include/android-headers
+    $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr install
 endef
 
 # Use the generic-package infrastructure

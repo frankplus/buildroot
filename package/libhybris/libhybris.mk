@@ -9,13 +9,13 @@ LIBHYBRIS_LICENSE = Apache-2.0
 LIBHYBRIS_LICENSE_FILES = COPYING
 LIBHYBRIS_DEPENDENCIES = android-headers host-pkgconf
 LIBHYBRIS_SUBDIR = hybris
-LIBHYBRIS_ANDROID_HEADERS_DIR = $(STAGING_DIR)/usr/include/android-headers
+LIBHYBRIS_ANDROID_HEADERS_DIR = $(STAGING_DIR)/usr/include/android
 LIBHYBRIS_HYBRIS_DIR = $(@D)/$(LIBHYBRIS_SUBDIR)
 LIBHYBRIS_TARGET = aarch64-linux-musl
 
 # Specify Android headers directory
 LIBHYBRIS_CONF_OPTS += \
-    --with-android-headers=$(STAGING_DIR)/usr/include/android-headers \
+    --with-android-headers=$(LIBHYBRIS_ANDROID_HEADERS_DIR) \
     --enable-experimental \
     --enable-property-cache \
     --enable-debug \
