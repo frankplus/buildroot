@@ -1,0 +1,12 @@
+if BR2_TOOLCHAIN_EXTERNAL_CLANG
+
+config BR2_TOOLCHAIN_EXTERNAL_SYSROOT_DIR
+    string "External toolchain sysroot directory"
+    depends on BR2_TOOLCHAIN_EXTERNAL_CLANG
+    help
+      Specify the sysroot directory for the external Clang toolchain.
+      This is needed to correctly locate the headers and libraries
+      for the target system.
+
+
+endif # BR2_TOOLCHAIN_EXTERNAL_CLANG

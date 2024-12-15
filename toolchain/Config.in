@@ -56,10 +56,17 @@ config BR2_TOOLCHAIN_EXTERNAL
 	  toolchain. Buildroot can either download automatically a
 	  toolchain, or use an already installed toolchain.
 
+config BR2_TOOLCHAIN_EXTERNAL_CLANG
+    bool "External Clang toolchain"
+	select BR2_TOOLCHAIN_USES_MUSL
+    help
+      Select this option if you want to use an external Clang toolchain.
+
 endchoice
 
 source "toolchain/toolchain-buildroot/Config.in"
 source "toolchain/toolchain-external/Config.in"
+source "toolchain/toolchain-clang-ohos/Config.in"
 
 # Generic toolchain options
 

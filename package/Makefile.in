@@ -220,6 +220,19 @@ TARGET_GCC_WRAPPERS_PREFIX = gcc-
 endif
 
 # Define TARGET_xx variables for all common binutils/gcc
+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CLANG),y)
+TARGET_AR       = llvm-ar
+TARGET_AS       = llvm-as
+TARGET_CC       = clang
+TARGET_CPP      = clang-cpp
+TARGET_CXX      = clang++
+TARGET_LD       = lld
+TARGET_NM       = llvm-nm
+TARGET_RANLIB   = llvm-ranlib
+TARGET_READELF  = llvm-readelf
+TARGET_OBJCOPY  = llvm-objcopy
+TARGET_OBJDUMP  = llvm-objdump
+else
 TARGET_AR       = $(TARGET_CROSS)$(TARGET_GCC_WRAPPERS_PREFIX)ar
 TARGET_AS       = $(TARGET_CROSS)as
 TARGET_CC       = $(TARGET_CROSS)gcc
@@ -232,11 +245,17 @@ TARGET_RANLIB   = $(TARGET_CROSS)$(TARGET_GCC_WRAPPERS_PREFIX)ranlib
 TARGET_READELF  = $(TARGET_CROSS)readelf
 TARGET_OBJCOPY  = $(TARGET_CROSS)objcopy
 TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
+endif
 
 ifeq ($(BR2_STRIP_strip),y)
 STRIP_STRIP_DEBUG := --strip-debug
-TARGET_STRIP = $(TARGET_CROSS)strip
-STRIPCMD = $(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
+	ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CLANG),y)
+		TARGET_STRIP = llvm-strip
+		STRIPCMD = llvm-strip --remove-section=.comment --remove-section=.note
+	else
+		TARGET_STRIP = $(TARGET_CROSS)strip
+		STRIPCMD = $(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
+	endif
 else
 TARGET_STRIP = /bin/true
 STRIPCMD = $(TARGET_STRIP)
