@@ -56,7 +56,7 @@ endef
 # endef
 
 define LIBHYBRIS_BUILD_CMDS
-    $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
+    $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 endef
 
 define LIBHYBRIS_INSTALL_TARGET_CMDS
