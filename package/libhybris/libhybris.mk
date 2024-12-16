@@ -26,9 +26,9 @@ LIBHYBRIS_CONF_OPTS += \
 
 # Set cross-compilation flags
 LIBHYBRIS_CONF_ENV += \
-    CFLAGS="$(TARGET_CFLAGS) -D_LARGEFILE64_SOURCE -Wno-error=int-conversion" \
-    CXXFLAGS="$(TARGET_CXXFLAGS) -D_LARGEFILE64_SOURCE -Wno-error=non-pod-varargs" \
-    LDFLAGS="$(TARGET_LDFLAGS)"
+    CFLAGS="$(TARGET_CFLAGS) --target=aarch64-linux-ohosmusl -D_LARGEFILE64_SOURCE -Wno-error=int-conversion" \
+    CXXFLAGS="$(TARGET_CXXFLAGS) --target=aarch64-linux-ohosmusl -D_LARGEFILE64_SOURCE -Wno-error=non-pod-varargs" \
+    LDFLAGS="$(TARGET_LDFLAGS) --target=aarch64-linux-ohosmusl"
 
 LIBHYBRIS_AUTORECONF = YES
 
