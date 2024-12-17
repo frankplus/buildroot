@@ -8,8 +8,8 @@ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
 TOOLCHAIN_DEPENDENCIES += toolchain-buildroot
 else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
 TOOLCHAIN_DEPENDENCIES += toolchain-external
-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CLANG),y)
-TOOLCHAIN_DEPENDENCIES += toolchain-clang-ohos
+else ifeq ($(BR2_TOOLCHAIN_CLANG_EXTERNAL),y)
+TOOLCHAIN_DEPENDENCIES += toolchain-clang-external
 endif
 
 TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO

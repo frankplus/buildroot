@@ -1,8 +1,8 @@
-if BR2_TOOLCHAIN_EXTERNAL_CLANG
+if BR2_TOOLCHAIN_CLANG_EXTERNAL
 
 config BR2_TOOLCHAIN_EXTERNAL_SYSROOT_DIR
     string "External toolchain sysroot directory"
-    depends on BR2_TOOLCHAIN_EXTERNAL_CLANG
+    depends on BR2_TOOLCHAIN_CLANG_EXTERNAL
     help
       Specify the sysroot directory for the external Clang toolchain.
       This is needed to correctly locate the headers and libraries
@@ -10,11 +10,11 @@ config BR2_TOOLCHAIN_EXTERNAL_SYSROOT_DIR
 
 config BR2_TOOLCHAIN_EXTERNAL_MUSL_SYSROOT_DIR
     string "External toolchain musl sysroot directory"
-    depends on BR2_TOOLCHAIN_EXTERNAL_CLANG
+    depends on BR2_TOOLCHAIN_CLANG_EXTERNAL
     help
       Specify the sysroot directory for the external musl toolchain.
       This is needed to correctly locate the headers and libraries
       for the target system.
 
 
-endif # BR2_TOOLCHAIN_EXTERNAL_CLANG
+endif # BR2_TOOLCHAIN_CLANG_EXTERNAL
