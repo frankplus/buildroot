@@ -13,5 +13,18 @@ HELLO_WORLD_LICENSE_FILES = COPYING
 # The package uses autotools for configuration and build
 HELLO_WORLD_AUTORECONF = YES
 
+# Set cross-compilation flags
+HELLO_WORLD_CONF_ENV += \
+    CFLAGS="$(TARGET_CFLAGS) --target=aarch64 -D_LARGEFILE64_SOURCE -Wno-error=int-conversion" \
+    CXXFLAGS="$(TARGET_CXXFLAGS) --target=aarch64 -D_LARGEFILE64_SOURCE -Wno-error=non-pod-varargs" \
+    LDFLAGS="$(TARGET_LDFLAGS) --target=aarch64"
+
+define HELLO_WORLD_CONFIGURE_CMDS
+    $(AUTORECONF) $(AUTORECONF_OPTS) $(@D)/
+    $(TARGET_CONFIGURE_OPTS) \
+    $(HELLO_WORLD_CONF_ENV) \
+    $(@D)/configure
+endef
+
 $(eval $(autotools-package))
 
